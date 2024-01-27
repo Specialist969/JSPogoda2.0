@@ -37,7 +37,7 @@ async function addLocation() {
 function loadLocations() {
   const locations = JSON.parse(localStorage.getItem('locations')) || [];
   locations.forEach(location => {
-    getWeather(location);
+    getWeather(location); // Zmiana: Wywołanie funkcji getWeather
   });
 }
 
@@ -97,12 +97,21 @@ function displayWeather(locationName, data) {
 function getWeatherIconUrl(condition) {
   // Mapowanie warunków pogodowych na ikony
   const iconMap = {
-    'clear': 'sun.png',
-    'clouds': 'cloud.png',
-    'rainy': 'rain.png',
-    'snowy': 'snow.png'
+    'clear': '01d.png',
+    'clouds': '03d.png',
+    'rainy': '10d.png',
+    'snowy': '13d.png'
     // Dodaj inne warunki pogodowe według potrzeb
   };
 
   return iconMap[condition];
+}
+
+async function getWeather(locationName) {
+  try {
+    const weatherData = await getWeatherData(locationName);
+    displayWeather(locationName, weatherData);
+  } catch (error) {
+    console.error('There was an error fetching weather data:', error);
+  }
 }
